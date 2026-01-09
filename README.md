@@ -1,98 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+#  Bank Account 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> Implémentation d'un système de gestion de compte bancaire avec transaction immuable et architecture hexagonale/DDD.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 Objectif
 
-## Description
+Système bancaire respectant strictement l'interface imposée avec :
+- ✅ Transaction immuable (Value Object)
+- ✅ Validation métier rigoureuse
+- ✅ Traçabilité complète des opérations
+- ✅ Architecture testable et maintenable
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+## 🚀 Quick Start
 
 ```bash
-$ npm install
+# Installation
+npm install
+
+# Lancer les tests unitaires
+npm run test
+
+# Lancer les tests e2e
+npm run test:e2e
+
+# Démarrer l'application
+npm run start:dev
+
+# Accéder à la documenttation de l'api ici
+open http://localhost:3000/api
 ```
 
-## Compile and run the project
+## 📚 API Documentation
+
+L'application génère automatiquement une documentation Swagger interactive.
+
+**URL** : http://localhost:3000/api
+
+### Endpoints Disponibles
+
+| Méthode | URL | Description |
+|---------|-----|-------------|
+| POST | `/accounts/deposit` | Effectuer un dépôt |
+| POST | `/accounts/withdraw` | Effectuer un retrait |
+| GET | `/accounts/statement` | Consulter le relevé |
+
+### Exemples
 
 ```bash
-# development
-$ npm run start
+# Dépôt de 1000 fr
+curl -X POST http://localhost:3000/accounts/deposit \
+  -H "Content-Type: application/json" \
+  -d '{"amount": 1000}'
 
-# watch mode
-$ npm run start:dev
+# Retrait de 500 fr
+curl -X POST http://localhost:3000/accounts/withdraw \
+  -H "Content-Type: application/json" \
+  -d '{"amount": 500}'
 
-# production mode
-$ npm run start:prod
+# Consulter le relevé
+curl http://localhost:3000/accounts/statement
 ```
 
-## Run tests
+## 🏗️ Architecture
+
+```
+src/
+├── domain/              # Cœur métier (indépendant)
+│   ├── entities/        # Transaction (immuable)
+│   ├── exceptions/      # Erreurs métier typées
+│   └── interfaces/      # BankAccount (interface imposée)
+│
+├── application/         # Logique applicative
+│   ├── services/        # BankAccountService
+│   └── ports/           # Interfaces (Repository, DateProvider)
+│
+├── infrastructure/      # Implémentation technique
+│   └── repositories/    # InMemoryTransactionRepository
+│
+└── presentation/        # API REST
+    ├── controllers/     # Endpoints HTTP
+    └── dto/             # Validation des entrées
+```
+
+## Règles Métier
+
+### Dépôts
+-  Montant strictement positif (> 0)
+-  Limite : 1 000 000 € par opération
+-  Mise à jour automatique du solde
+
+### Retraits
+-  Montant strictement positif (> 0)
+-  Solde suffisant obligatoire (pas de découvert)
+-  Limite : 1 000 000 € par opération
+
+### Relevé
+-  Ordre chronologique décroissant (plus récent en premier)
+-  Format : Date | Type | Montant | Solde
+-  Cohérence des soldes garantie
+
+## 🧪 Tests
 
 ```bash
-# unit tests
-$ npm run test
+# Tests unitaires
+npm test
 
-# e2e tests
-$ npm run test:e2e
+# Tests avec couverture
+npm run test:cov
 
-# test coverage
-$ npm run test:cov
+# Tests en mode watch
+npm run test:watch
+
+# Tests E2E
+npm run test:e2e
 ```
 
-## Deployment
+## Stockage
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+**En mémoire** : Les transactions sont stockées dans une `Map<accountId, Transaction[]>`
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+⚠️ **Données perdues au redémarrage** : Volontaire pour simplifier les tests
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
+Grâce à l'abstraction par interface, le reste du code reste inchangé.
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🛠️ Stack Technique
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Backend** : NestJS • TypeScript  
+**Tests** : Jest • Supertest  
+**Architecture** : DDD • Hexagonale • Clean Architecture  
+**Outils** : ESLint • Prettier • Swagger • Git  
+**Patterns** : Immutabilité • Repository • Dependency Injection
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Pour simuler un compte unique, utilisez toujours le même ID (ex: `"default"`).
 
-## Stay in touch
+### Stockage en Mémoire
+- **Simplicité** : Pas de configuration externe
+- **Performance** : Accès instantané
+- **Tests** : Isolation parfaite entre les tests
+- **Production** : Remplacement facile via injection de dépendances
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+### Long terme
+- [ ] Architecture microservices
+- [ ] Event streaming (Kafka)
+- [ ] GraphQL API
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+## 👤 Auteur
+Nom:  Yeo pevrogui noel
+EMAIL: yeopevroguinoel@gmail.com 
