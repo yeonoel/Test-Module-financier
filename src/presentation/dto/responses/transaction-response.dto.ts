@@ -6,9 +6,6 @@ export class TransactionResponseDto {
 
   @ApiProperty({ example: 1500 })
   newBalance: number;
-
-  @ApiProperty({ example: 'uuid-string' })
-  transactionId: string;
 }
 
 export class StatementTransactionDto {
