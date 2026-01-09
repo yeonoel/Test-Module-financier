@@ -100,29 +100,12 @@ src/
 -  Format : Date | Type | Montant | Solde
 -  Cohérence des soldes garantie
 
-## Tests
-
-```bash
-# Tests unitaires
-npm test
-
-# Tests avec couverture
-npm run test:cov
-
-# Tests en mode watch
-npm run test:watch
-
-# Tests E2E
-npm run test:e2e
-```
 
 ## Stockage
 
 **En mémoire** : Les transactions sont stockées dans une `Map<accountId, Transaction[]>`
 
-⚠️ **Données perdues au redémarrage** : Volontaire pour simplifier les tests
-
-
+⚠️ **Données perdues au redémarrage** : Volontaire
 
 Grâce à l'abstraction par interface, le reste du code reste inchangé.
 
@@ -134,15 +117,7 @@ Grâce à l'abstraction par interface, le reste du code reste inchangé.
 **Outils** : ESLint • Prettier • Swagger • Git  
 **Patterns** : Immutabilité • Repository • Dependency Injection
 
-
-Pour simuler un compte unique, utilisez toujours le même ID (ex: `"default"`).
-
-### Stockage en Mémoire
-- **Simplicité** : Pas de configuration externe
-- **Performance** : Accès instantané
-- **Tests** : Isolation parfaite entre les tests
-- **Production** : Remplacement facile via injection de dépendances
-
+Pour simuler un compte unique, j'utilise le même ID  ( `"default"`).
 
 ### Long terme
 - [ ] Architecture microservices
