@@ -5,7 +5,7 @@ export class Transaction {
     public readonly date: string,
     public readonly type: TransactionType,
     public readonly amount: number,
-    public readonly balance: number,
+    public readonly balance: number
   ) {
     Object.freeze(this);
   }
