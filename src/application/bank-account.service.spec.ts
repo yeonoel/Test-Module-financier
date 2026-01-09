@@ -29,7 +29,6 @@ describe('BankAccountService', () => {
         },
       ],
     }).compile();
-
     service = module.get<BankAccountService>(BankAccountService);
   });
 
@@ -39,10 +38,11 @@ describe('BankAccountService', () => {
 
   describe('deposit', () => {
     it('should successfully deposit a valid amount and update balance', () => {
+      // Arrange - Act
       service.deposit(1000);
-
-      expect(service.getCurrentBalance()).toBe(1000);
       const transactions = repository.findByAccount('default');
+      // Assert
+      expect(service.getCurrentBalance()).toBe(1000);
       expect(transactions).toHaveLength(1);
       expect(transactions[0].amount).toBe(1000);
       expect(transactions[0].balance).toBe(1000);
@@ -67,7 +67,6 @@ describe('BankAccountService', () => {
       service.deposit(1000);
       service.deposit(500);
       service.deposit(250);
-
       expect(service.getCurrentBalance()).toBe(1750);
       const transactions = repository.findByAccount('default');
       expect(transactions).toHaveLength(3);
@@ -82,7 +81,6 @@ describe('BankAccountService', () => {
 
     it('should successfully withdraw a valid amount with sufficient balance', () => {
       service.withdraw(500);
-
       expect(service.getCurrentBalance()).toBe(500);
       const transactions = repository.findByAccount('default');
       expect(transactions).toHaveLength(2);
@@ -113,7 +111,6 @@ describe('BankAccountService', () => {
 
     it('should throw AmountLimitExceededException when withdrawal exceeds limit', () => {
       service.deposit(1_000_000);
-
       expect(() => service.withdraw(1_000_001)).toThrow(AmountLimitExceededException);
     });
   });
@@ -121,9 +118,7 @@ describe('BankAccountService', () => {
   describe('printStatement', () => {
     it('should print no transactions found when account is empty', () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-
       service.printStatement();
-
       expect(consoleSpy).toHaveBeenCalledWith('No transactions found.');
       consoleSpy.mockRestore();
     });
@@ -131,9 +126,7 @@ describe('BankAccountService', () => {
     it('should print correctly formatted statement for single transaction', () => {
       service.deposit(1000);
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-
       service.printStatement();
-
       expect(consoleSpy).toHaveBeenCalledTimes(3);
       expect(consoleSpy).toHaveBeenNthCalledWith(1, 'Date       | Type       | Amount  | Balance');
       expect(consoleSpy).toHaveBeenNthCalledWith(2, '-----------+------------+---------+---------');
@@ -164,7 +157,6 @@ describe('BankAccountService', () => {
       service.deposit(1000);
       service.deposit(500);
       service.withdraw(200);
-
       const transactions = repository.findByAccount('default');
       expect(transactions[0].balance).toBe(1000);
       expect(transactions[1].balance).toBe(1500);
@@ -181,16 +173,12 @@ describe('BankAccountService', () => {
 
       service.deposit(1000);
       expect(service.getCurrentBalance()).toBe(1000);
-
       service.withdraw(500);
       expect(service.getCurrentBalance()).toBe(500);
-
       service.deposit(2000);
       expect(service.getCurrentBalance()).toBe(2500);
-
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
       service.printStatement();
-
       const transactions = repository.findByAccount('default');
       expect(transactions).toHaveLength(3);
       expect(consoleSpy).toHaveBeenCalledTimes(5);
