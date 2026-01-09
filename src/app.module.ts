@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { BankAccountController } from './presentation/bank-account.controller';
-import { InMemoryTransactionRepository } from './infrastructure/in-memory-transaction.repository';
+import { BankAccountController } from './presentation/controllers/bank-account.controller';
+import { InMemoryTransactionRepository } from './infrastructure/repository/in-memory-transaction.repository';
 import { SystemDateProvider } from './infrastructure/system-date.provider';
-import { BankAccountService } from './application/bank-account.service';
+import { BankAccountService } from './application/services/bank-account.service';
 
 @Module({
   imports: [],

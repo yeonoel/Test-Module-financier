@@ -2,15 +2,17 @@
 
 > Implémentation d'un système de gestion de compte bancaire avec transaction immuable et architecture hexagonale/DDD.
 
-## 🎯 Objectif
+![Docc api](./src/images/doc-swagger.png)
+
+## Objectif
 
 Système bancaire respectant strictement l'interface imposée avec :
-- ✅ Transaction immuable (Value Object)
-- ✅ Validation métier rigoureuse
-- ✅ Traçabilité complète des opérations
-- ✅ Architecture testable et maintenable
+- Transaction immuable (Value Object)
+- Validation métier rigoureuse
+- Traçabilité complète des opérations
+- Architecture testable et maintenable
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Installation
@@ -29,7 +31,7 @@ npm run start:dev
 open http://localhost:3000/api
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 L'application génère automatiquement une documentation Swagger interactive.
 
@@ -60,7 +62,7 @@ curl -X POST http://localhost:3000/accounts/withdraw \
 curl http://localhost:3000/accounts/statement
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 src/
@@ -98,7 +100,7 @@ src/
 -  Format : Date | Type | Montant | Solde
 -  Cohérence des soldes garantie
 
-## 🧪 Tests
+## Tests
 
 ```bash
 # Tests unitaires
@@ -124,7 +126,7 @@ npm run test:e2e
 
 Grâce à l'abstraction par interface, le reste du code reste inchangé.
 
-## 🛠️ Stack Technique
+## Stack Technique
 
 **Backend** : NestJS • TypeScript  
 **Tests** : Jest • Supertest  
@@ -147,8 +149,6 @@ Pour simuler un compte unique, utilisez toujours le même ID (ex: `"default"`).
 - [ ] Event streaming (Kafka)
 - [ ] GraphQL API
 
-
-
-## 👤 Auteur
+## Auteur
 Nom:  Yeo pevrogui noel
 EMAIL: yeopevroguinoel@gmail.com 

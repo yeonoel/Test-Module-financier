@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import  request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { InMemoryTransactionRepository } from '../src/infrastructure/in-memory-transaction.repository';
+import { InMemoryTransactionRepository } from '../src/infrastructure/repository/in-memory-transaction.repository';
 
 describe('BankAccountController (e2e)', () => {
   let app: INestApplication;
@@ -40,7 +40,6 @@ describe('BankAccountController (e2e)', () => {
         .post('/accounts/deposit')
         .send({ amount: 1000 })
         .expect(200);
-
       expect(response.body).toEqual({
         accountId: 'default',
         newBalance: 1000,

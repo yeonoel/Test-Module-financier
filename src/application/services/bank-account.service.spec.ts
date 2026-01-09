@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BankAccountService } from './bank-account.service';
-import { InMemoryTransactionRepository } from '../infrastructure/in-memory-transaction.repository';
-import { IDateProvider } from './ports/date-provider.interface';
-import { InvalidAmountException } from '../domain/exceptions/invalid-amount.exception';
-import { InsufficientFundsException } from '../domain/exceptions/insufficient-funds.exception';
-import { AmountLimitExceededException } from '../domain/exceptions/amount-limit-exceeded.exception';
+import { InMemoryTransactionRepository } from '../../infrastructure/repository/in-memory-transaction.repository';
+import { IDateProvider } from '../ports/date-provider.interface';
+import { InvalidAmountException } from '../../domain/exceptions/invalid-amount.exception';
+import { InsufficientFundsException } from '../../domain/exceptions/insufficient-funds.exception';
+import { AmountLimitExceededException } from '../../domain/exceptions/amount-limit-exceeded.exception';
 
 describe('BankAccountService', () => {
   let service: BankAccountService;
@@ -38,11 +38,9 @@ describe('BankAccountService', () => {
 
   describe('deposit', () => {
     it('should successfully deposit a valid amount and update balance', () => {
-      // Arrange - Act
       service.deposit(1000);
-      const transactions = repository.findByAccount('default');
-      // Assert
       expect(service.getCurrentBalance()).toBe(1000);
+      const transactions = repository.findByAccount('default');
       expect(transactions).toHaveLength(1);
       expect(transactions[0].amount).toBe(1000);
       expect(transactions[0].balance).toBe(1000);
@@ -157,6 +155,7 @@ describe('BankAccountService', () => {
       service.deposit(1000);
       service.deposit(500);
       service.withdraw(200);
+
       const transactions = repository.findByAccount('default');
       expect(transactions[0].balance).toBe(1000);
       expect(transactions[1].balance).toBe(1500);
@@ -173,12 +172,16 @@ describe('BankAccountService', () => {
 
       service.deposit(1000);
       expect(service.getCurrentBalance()).toBe(1000);
+
       service.withdraw(500);
       expect(service.getCurrentBalance()).toBe(500);
+
       service.deposit(2000);
       expect(service.getCurrentBalance()).toBe(2500);
+
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
       service.printStatement();
+
       const transactions = repository.findByAccount('default');
       expect(transactions).toHaveLength(3);
       expect(consoleSpy).toHaveBeenCalledTimes(5);

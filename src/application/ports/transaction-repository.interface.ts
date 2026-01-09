@@ -1,4 +1,4 @@
-import { Transaction } from '../../domain/transaction.entity';
+import { Transaction } from '../../domain/entities/transaction.entity';
 
 export interface ITransactionRepository {
   save(accountId: string, transaction: Transaction): void;

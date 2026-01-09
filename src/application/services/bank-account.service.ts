@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { BankAccount } from '../domain/bank-account.interface';
-import { Transaction } from '../domain/transaction.entity';
-import { TransactionType } from '../domain/transaction-type.enum';
-import { InvalidAmountException } from '../domain/exceptions/invalid-amount.exception';
-import { InsufficientFundsException } from '../domain/exceptions/insufficient-funds.exception';
-import { AmountLimitExceededException } from '../domain/exceptions/amount-limit-exceeded.exception';
-import type { ITransactionRepository } from './ports/transaction-repository.interface';
-import type { IDateProvider } from './ports/date-provider.interface';
+import { BankAccount } from '../../domain/interfaces/bank-account.interface';
+import { Transaction } from '../../domain/entities/transaction.entity';
+import { TransactionType } from '../../domain/enums/transaction-type.enum';
+import { InvalidAmountException } from '../../domain/exceptions/invalid-amount.exception';
+import { InsufficientFundsException } from '../../domain/exceptions/insufficient-funds.exception';
+import { AmountLimitExceededException } from '../../domain/exceptions/amount-limit-exceeded.exception';
+import type { ITransactionRepository } from '../ports/transaction-repository.interface';
+import type { IDateProvider } from '../ports/date-provider.interface';
 
 @Injectable()
 export class BankAccountService implements BankAccount {
